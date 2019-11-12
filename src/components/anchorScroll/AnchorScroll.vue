@@ -2,30 +2,55 @@
   <div>
     <!-- 内容区域 -->
     <div class="scroll-content">
-      <div>content-0</div>
+      <div v-for="(item,index) in contents" :key="index">
+        {{item.text}}
+      </div>
+      <!-- <div>content-0</div>
       <div>content-1</div>
       <div>content-2</div>
       <div>content-3</div>
-      <div>content-4</div>
+      <div>content-4</div> -->
     </div>
     <!-- 导航区域 -->
-    <ul class="scroll-nav">
-      <li :class="{active: active===0}" @click="scrollTo(0)">content-0</li>
+    <ul class="scroll-nav" :style="navStyle">
+      <li v-for="(item,index) in navs" :key="index" :class="{active: active===item.id}" :style="navItemStyle" @click="scrollTo(index)">
+        <slot name="navitem" :nav="item">{{ item.text }}</slot>
+      </li>
+      <!-- <li :class="{active: active===0}" @click="scrollTo(0)">content-0</li>
       <li :class="{active: active===1}" @click="scrollTo(1)">content-1</li>
       <li :class="{active: active===2}" @click="scrollTo(2)">content-2</li>
       <li :class="{active: active===3}" @click="scrollTo(3)">content-3</li>
-      <li :class="{active: active===4}" @click="scrollTo(4)">content-4</li>
+      <li :class="{active: active===4}" @click="scrollTo(4)">content-4</li> -->
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  props: {},
+  props: {
+    navs: {
+      type: Array,
+      default: []
+    },
+    navStyle: {
+      type: Object,
+      default: function () { return {} }
+    },
+    navItemStyle: {
+      type: Object,
+      default: function () { return {} }
+    },
+    contents: {
+      type: Array,
+      default: []
+    }
+  },
   data() {
     return {
-      active: 0 // 当前激活的导航索引
-    };
+      active: 0
+    }
+  },
+  created(){
   },
   mounted() {
     // 监听滚动事件
