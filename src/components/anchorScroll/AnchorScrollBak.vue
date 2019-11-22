@@ -1,30 +1,53 @@
+<template>
+  <div>
+    <!-- 内容区域 -->
+    <div class="scroll-content">
+      <div :class="`section${index}`" v-for="(item,index) in contents" :key="index">
+        <slot name="contentItem" :content="item">{{ item.text }}</slot>
+      </div>
+      <!-- <div>content-0</div>
+      <div>content-1</div>
+      <div>content-2</div>
+      <div>content-3</div>
+      <div>content-4</div> -->
+    </div>
+    <!-- 导航区域 -->
+    <ul class="scroll-nav" :style="navStyle">
+      <li v-for="(item,index) in navs" :key="index" :class="{active: active===item.id}" :style="navItemStyle" @click="scrollTo(index)">
+        <slot name="navitem" :nav="item">{{ item.text }}</slot>
+      </li>
+      <!-- <li :class="{active: active===0}" @click="scrollTo(0)">content-0</li>
+      <li :class="{active: active===1}" @click="scrollTo(1)">content-1</li>
+      <li :class="{active: active===2}" @click="scrollTo(2)">content-2</li>
+      <li :class="{active: active===3}" @click="scrollTo(3)">content-3</li>
+      <li :class="{active: active===4}" @click="scrollTo(4)">content-4</li> -->
+    </ul>
+  </div>
+</template>
+
 <script>
 export default {
   props: {
-    position: {
-      type: String,
-      default: 'right'
+    navs: {
+      type: Array,
+      default: []
     },
-    // navs: {
-    //   type: Array,
-    //   default: []
-    // },
-    // navStyle: {
-    //   type: Object,
-    //   default: function () { return {} }
-    // },
-    // navItemStyle: {
-    //   type: Object,
-    //   default: function () { return {} }
-    // },
-    // contents: {
-    //   type: Array,
-    //   default: []
-    // }
+    navStyle: {
+      type: Object,
+      default: function () { return {} }
+    },
+    navItemStyle: {
+      type: Object,
+      default: function () { return {} }
+    },
+    contents: {
+      type: Array,
+      default: []
+    }
   },
   data() {
     return {
-      switchIndex: 0
+      active: 0
     }
   },
   created(){
@@ -48,7 +71,8 @@ export default {
         offsetTopArr.push(item.offsetTop);
       });
       // 获取当前文档流的 scrollTop
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
       // 定义当前点亮的导航下标
       let navIndex = 0;
       for (let n = 0; n < offsetTopArr.length; n++) {
@@ -58,17 +82,18 @@ export default {
           navIndex = n;
         }
       }
-      this.switchIndex = navIndex;
+      this.active = navIndex;
     },
     // 跳转到指定索引的元素
-    scrollTo(index){
-      this.switchIndex=index;
-      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-
+    scrollTo(index) {
+      // 获取目标的 offsetTop
+      // css选择器是从 1 开始计数，我们是从 0 开始，所以要 +1
       const targetOffsetTop = document.querySelector(
         `.scroll-content>div:nth-child(${index + 1})`
       ).offsetTop;
-
+      // 获取当前 offsetTop
+      let scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
       // 定义一次跳 50 个像素，数字越大跳得越快
       const STEP = 50;
       // 判断是往下滑还是往上滑
@@ -108,59 +133,8 @@ export default {
           requestAnimationFrame(smoothUp);
         }
       }
-      // this.$emit("change",index)
-    },
-    anchorScroll(createElement){
-      let $navs = [];
-      let $navItems = this.$slots['nav-item'] || [];
-      let itemIndex = 0;
-      let _this = this;
-      // debugger;
-      // $navItems.map(function(item, index){
-      //   $navs.push(createElement('li',{
-      //     class: {
-      //       active: _this.switchIndex==index
-      //     },
-      //     on: {
-      //       click: _this.scrollTo.bind(this, index)
-      //     },
-      //   },item.text))
-      // })
-
-      let $pannels = [];
-      let $pannelItems = this.$slots['scroll-pannel'] || [];
-      console.log($pannelItems);
-      $pannelItems.map(function(item,index){
-        console.log(item.children);
-        $navs.push(createElement('li',{
-          class: {
-            active: _this.switchIndex==index
-          },
-          on: {
-            click: _this.scrollTo.bind(this, index)
-          },
-        },item.data.attrs.title))
-        $pannels.push(createElement('div',111))
-      })
-      
-      return createElement('div',{
-        class: 'scroll-wrap'
-      },
-      [
-        createElement('div', {
-          class: 'scroll-content',
-        },
-        $pannels),
-        createElement('ul', {
-          class: 'scroll-nav'
-        },
-        $navs)
-      ])
     }
-  },
-  render: function(createElement){
-    return this.anchorScroll(createElement);
-  },
+  }
 };
 </script>
 

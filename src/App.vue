@@ -1,11 +1,39 @@
 <template>
   <div id="app">
-    <anchor-scroll :navs="navs" :navStyle="navStyle" :navItemStyle="navItemStyle" :contents="contents">
+    <anchor-scroll position="right">
+      <!-- <template slot="nav-item">
+        nav1
+      </template>
+      <template slot="nav-item">
+        nav2
+      </template>
+      <template slot="nav-item">
+        nav3
+      </template> -->
+      <div slot="scroll-pannel" title="nav1">
+        <div class="part1">part1</div>
+        <div class="part2">part2</div>
+      </div>
+      <div slot="scroll-pannel" title="nav2">
+        pannel2
+      </div>
+      <div slot="scroll-pannel" title="nav3">
+        pannel3
+      </div>
+    </anchor-scroll>
+    <!-- <anchor-scroll :navs="navs" :navStyle="navStyle" :navItemStyle="navItemStyle" :contents="contents">
+      <template slot="contentItem" slot-scope="props">
+        <div v-if="props.content.id==0">111</div>
+        <div v-if="props.content.id==1">222</div>
+        <div v-if="props.content.id==2">333</div>
+        <div v-if="props.content.id==3">444</div>
+        <div v-if="props.content.id==4">555</div>
+      </template>
       <template slot="navitem" slot-scope="props">
         <i :class="props.nav.icon">{{props.nav.icon}}</i>
         <span class="icon">{{props.nav.text}}</span>
       </template>
-    </anchor-scroll>
+    </anchor-scroll> -->
     <!-- <tab type="simple">
       <div slot="tab-item">1</div>
       <div slot="tab-item">2</div>
@@ -27,6 +55,12 @@
     </modal> -->
     <!-- <achor-heading :level="l1">111</achor-heading>
     <achor-heading :level="l2"><span>222</span></achor-heading> -->
+    <!-- <anchored-heading :level="1">
+      <p slot="item">1</p>
+      <p slot="item">2</p>
+      <p slot="item">3</p>
+      <p>4</p>
+    </anchored-heading> -->
   </div>
 </template>
 
@@ -37,6 +71,7 @@ import Tab from './components/tab/Tab'
 import GlobelButton from './components/globelButton/GlobelButton'
 import Modal from './components/modal/Modal'
 import AchorHeading from './components/anchorHeading/AchorHeading'
+import AnchoredHeading from './components/anchoredHeading/AnchoredHeading'
 
 var list = [...'MVC前端网'];
 export default {
@@ -78,7 +113,8 @@ export default {
     Tab,
     GlobelButton,
     Modal,
-    AchorHeading
+    AchorHeading,
+    AnchoredHeading
   },
   methods: {
     ok(){
