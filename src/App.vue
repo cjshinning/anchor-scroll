@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <anchor-scroll position="right">
+    <!-- :position="'left'" -->
+    <anchor-scroll :customClass="customClass">
       <!-- <template slot="nav-item">
         nav1
       </template>
@@ -11,14 +12,16 @@
         nav3
       </template> -->
       <div slot="scroll-pannel" title="nav1">
-        <div class="part1">part1</div>
+        <div class="part1">
+          <p>part1</p>
+        </div>
         <div class="part2">part2</div>
       </div>
       <div slot="scroll-pannel" title="nav2">
-        pannel2
+        <div class="pannel2">pannel2</div>
       </div>
       <div slot="scroll-pannel" title="nav3">
-        pannel3
+        <div class="pannel3">pannel3</div>
       </div>
     </anchor-scroll>
     <!-- <anchor-scroll :navs="navs" :navStyle="navStyle" :navItemStyle="navItemStyle" :contents="contents">
@@ -78,6 +81,7 @@ export default {
   name: 'App',
   data(){
     return {
+      customClass: "my-scroll",
       navs: [
         {id:0, text:"Tab 1", icon: 'ic1'},
         {id:1, text:"Tab 2", icon: 'ic2'},
@@ -124,6 +128,24 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.my-scroll >>> .scroll-nav li{
+  line-height: 2;
+}
+.part1{
+  height: 800px;
+  background: #2b2b2b;
+}
+.part2{
+  height: 200px;
+  background: #c1c1c1;
+}
+.pannel2{
+  height: 800px;
+  background: #5c5c5c;
+}
+.pannel3{
+  height: 1000px;
+  background: #a2a2a2;
+}
 </style>

@@ -5,6 +5,10 @@ export default {
       type: String,
       default: 'right'
     },
+    customClass: {
+      type: String,
+      default: ''
+    },
     // navs: {
     //   type: Array,
     //   default: []
@@ -30,6 +34,14 @@ export default {
   created(){
   },
   mounted() {
+    console.log(this.customClass);
+    if(this.position === 'left') {
+      document.querySelector('.scroll-nav').className = "scroll-nav left";
+    }
+    if(this.customClass){
+      document.querySelector('.scroll-wrap').className = `scroll-wrap ${this.customClass}`;
+    }
+    
     // 监听滚动事件
     window.addEventListener("scroll", this.onScroll, false);
   },
@@ -73,10 +85,8 @@ export default {
       const STEP = 50;
       // 判断是往下滑还是往上滑
       if (scrollTop > targetOffsetTop) {
-        // 往上滑
         smoothUp();
       } else {
-        // 往下滑
         smoothDown();
       }
       // 定义往下滑函数
@@ -112,8 +122,8 @@ export default {
     },
     anchorScroll(createElement){
       let $navs = [];
-      let $navItems = this.$slots['nav-item'] || [];
-      let itemIndex = 0;
+      // let $navItems = this.$slots['nav-item'] || [];
+      // let itemIndex = 0;
       let _this = this;
       // debugger;
       // $navItems.map(function(item, index){
@@ -129,9 +139,7 @@ export default {
 
       let $pannels = [];
       let $pannelItems = this.$slots['scroll-pannel'] || [];
-      console.log($pannelItems);
       $pannelItems.map(function(item,index){
-        console.log(item.children);
         $navs.push(createElement('li',{
           class: {
             active: _this.switchIndex==index
@@ -140,7 +148,7 @@ export default {
             click: _this.scrollTo.bind(this, index)
           },
         },item.data.attrs.title))
-        $pannels.push(createElement('div',111))
+        $pannels.push(createElement('div',item.children))
       })
       
       return createElement('div',{
@@ -156,6 +164,7 @@ export default {
         },
         $navs)
       ])
+      
     }
   },
   render: function(createElement){
@@ -165,8 +174,11 @@ export default {
 </script>
 
 <style scoped>
+.scroll-wrap{
+  position: relative;
+}
 /* 内容区的样式 */
-.scroll-content {
+/* .scroll-content {
   background-color: white;
 }
 .scroll-content > div {
@@ -175,9 +187,9 @@ export default {
   font-size: 36px;
   background-color: #7ec384;
 }
-.scroll-content div:nth-child(2n) {
+.scroll-content > div:nth-child(2n) {
   background-color: #847ec3;
-}
+} */
 /* 导航栏的样式 */
 .scroll-nav {
   position: fixed;
@@ -185,6 +197,10 @@ export default {
   transform: translate(0, -50%);
   right: 0px;
   background-color: #efefef;
+}
+.scroll-nav.left{
+  left: 0;
+  right: auto;
 }
 .scroll-nav li {
   padding: 0 20px;
